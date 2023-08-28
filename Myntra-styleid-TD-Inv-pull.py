@@ -1,20 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
-get_ipython().system('pip install selenium webdriver_manager')
-
-
-# In[ ]:
-
-
-
-
-
-# In[51]:
-
 
 from selenium import webdriver
 from lxml import etree
@@ -84,12 +67,15 @@ def extract_data(driver, style_id):
         return []
 
 def main():
-    ndf = pd.read_csv(r"C:\Ajio Assets\Python automation\web scrapping\Myntra web scrapping\Pull_Image.csv")
+    ndf = pd.read_csv("Ids.csv")
     style_ids = ndf['Style ID'].to_list()
-    #style_ids = ["24109732"]
 
     # Initialize the WebDriver
-    driver = webdriver.Chrome()
+    options = Options()
+    # options.add_argument('--headless')
+    # options.add_argument('--no-sandbox')
+    options.add_argument('--disable-dev-shm-usage')
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     extracted_data = []
     for style_id in style_ids:
@@ -104,15 +90,10 @@ def main():
     driver.quit()
 
     df = pd.DataFrame(extracted_data)
-    df.to_csv(r'C:\Ajio Assets\Python automation\web scrapping\Myntra web scrapping\extracted_data.csv', index=False)
+    df.to_csv('extracted_data.csv', index=False)
     print("Data extraction and processing completed.")
 
 if __name__ == "__main__":
     main()
 
-
-# In[49]:
-
-
-script_json['pdpData']['brand']['name']
 
